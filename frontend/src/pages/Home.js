@@ -1,7 +1,7 @@
 import React from 'react'
 import CategoryList from '../components/CategoryList'
 import BannerProduct from '../components/BannerProduct'
-import HorizontalCartProduct from '../components/HorizontalCartProduct'
+import HorizontalCardProduct from '../components/HorizontalCartProduct'
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
       <CategoryList/>
       <BannerProduct/>
 
-      <HorizontalCartProduct catergory={"airpods"}/>
+      <HorizontalCardProduct catergory={"airpods"} heading={"Top's airpods"}/>
     </div>
   )
 }

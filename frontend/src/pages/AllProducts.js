@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import UploadProduct from '../components/UploadProduct'
 import SummaryApi from '../common'
-import AdminProductCart from '../components/AdminProductCart'
+import AdminProductCard from '../components/AdminProductCard'
 
 const AllProducts = () => {
   const [openUploadProduct, setOpenUploadProduct] = useState(false)
@@ -30,7 +30,7 @@ const AllProducts = () => {
           {
             allProduct.map((product,index)=>{
               return(
-                <AdminProductCart data={product} key={index+"allProduct"} fetchdata={fetchAllProduct}/>
+                <AdminProductCard data={product} key={index+"allProduct"} fetchdata={fetchAllProduct}/>
               )
             })
           }

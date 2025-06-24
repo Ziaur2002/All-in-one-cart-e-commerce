@@ -10,11 +10,17 @@ const Home = () => {
       <CategoryList/>
       <BannerProduct/>
 
-      <HorizontalCardProduct category={"airpods"} heading={"Top's Airpods"}/>
-      <HorizontalCardProduct category={"camera"} heading={"Top's Cameras"}/>
+      <HorizontalCardProduct category={"airpods"} heading={"Top's Airpodes"}/>
+      <HorizontalCardProduct category={"watches"} heading={"Popular's Watches"}/>
 
-      <VerticalCardProduct category={"mobiles"} heading={"Top's Mobiles"}/>
-
+      <VerticalCardProduct category={"mobiles"} heading={"Mobiles"}/>
+      <VerticalCardProduct category={"mouse"} heading={"Mouse"}/>
+      <VerticalCardProduct category={"televisions"} heading={"Televisions"}/>
+      <VerticalCardProduct category={"camera"} heading={"Camera & Photography"}/>
+      <VerticalCardProduct category={"earphones"} heading={"Wired Earphones"}/>
+      <VerticalCardProduct category={"speakers"} heading={"Bluetooth Speakers"}/>
+      <VerticalCardProduct category={"refrigerator"} heading={"Refrigerator"}/>
+      <VerticalCardProduct category={"trimmers"} heading={"Trimmers"}/>
     </div>
   )
 }

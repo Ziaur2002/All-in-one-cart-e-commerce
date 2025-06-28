@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SummaryApi from './common';
 import Context from './context';
 import { useDispatch } from 'react-redux';
@@ -12,33 +12,51 @@ import { setUserDetails } from './store/userSlice';
 
 function App() {
   const dispatch = useDispatch()
+  const [cartProductCount, setCartProductCount] = useState(0)
 
-  const fetchUserDetails = async()=>{
-    const dataResponse = await fetch(SummaryApi.current_user.url,{
-      method : SummaryApi.current_user.method,
-      credentials : 'include'
+  const fetchUserDetails = async () => {
+    const dataResponse = await fetch(SummaryApi.current_user.url, {
+      method: SummaryApi.current_user.method,
+      credentials: 'include'
     })
 
     const dataApi = await dataResponse.json()
 
-    if(dataApi.success){
+    if (dataApi.success) {
       dispatch(setUserDetails(dataApi.data))
     }
 
   }
-  
-  useEffect(()=>{
+
+  const fetchUserAddToCart = async () => {
+    const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
+      method: SummaryApi.addToCartProductCount.method,
+      credentials: 'include'
+    })
+
+    const dataApi = await dataResponse.json()
+
+    setCartProductCount(dataApi?.data?.count)
+  }
+
+  useEffect(() => {
     /*User Details*/
     fetchUserDetails()
+    /*User Add to Cart Count*/
+    fetchUserAddToCart()
 
-    
-  },[])
+
+  }, [])
   return (
     <>
       <Context.Provider value={{
-        fetchUserDetails //User Details Fetch
+        fetchUserDetails, //User Details Fetch
+        fetchUserAddToCart, //User Add to Cart Count Fetch
+        cartProductCount, //User Add to Cart Count
       }}>
-        <ToastContainer />
+        <ToastContainer
+          position='top-center'
+        />
         <Header />
         <main className='min-h-[calc(100vh-120px)] pt-16'>
           <Outlet />

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SummaryApi from '../common'
 import Context from '../context'
-import displayINRCurrency from '../helpers/displayCurrency'
+import displayBDTCurrency from '../helpers/displayCurrency'
 import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
@@ -154,8 +154,8 @@ const Cart = () => {
                                     <h2 className='text-lg lg:text-xl text-ellipsis line-clamp-1'>{product?.productId?.productName}</h2>
                                     <p className='capitalize text-slate-500'>{product?.productId.category}</p>
                                     <div className='flex items-center justify-between'>
-                                            <p className='text-red-600 font-medium text-lg'>{displayINRCurrency(product?.productId?.sellingPrice)}</p>
-                                            <p className='text-slate-600 font-semibold text-lg'>{displayINRCurrency(product?.productId?.sellingPrice  * product?.quantity)}</p>
+                                            <p className='text-red-600 font-medium text-lg'>{displayBDTCurrency(product?.productId?.sellingPrice)}</p>
+                                            <p className='text-slate-600 font-semibold text-lg'>{displayBDTCurrency(product?.productId?.sellingPrice  * product?.quantity)}</p>
                                     </div>
                                     <div className='flex items-center gap-3 mt-1'>
                                         <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={()=>decraseQty(product?._id,product?.quantity)}>-</button>
@@ -188,7 +188,7 @@ const Cart = () => {
 
                                     <div className='flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600'>
                                         <p>Total Price</p>
-                                        <p>{displayINRCurrency(totalPrice)}</p>    
+                                        <p>{displayBDTCurrency(totalPrice)}</p>    
                                     </div>
 
                                     <button className='bg-blue-600 p-2 text-white w-full mt-2'>Payment</button>

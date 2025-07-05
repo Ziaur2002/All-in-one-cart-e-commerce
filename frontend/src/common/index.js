@@ -1,5 +1,3 @@
-import addToCartViewProduct from "../../../backend/controller/user/addToCartViewProduct"
-
 const backendDomain = "http://localhost:8080"
 
 const SummaryApi = {

@@ -46,6 +46,7 @@ router.post("/product-details", getProductDetails)
 router.post("/addtocart",authToken,addToCartController)
 router.get("/countAddToCartProduct",authToken,countAddToCartProduct)
 router.get("/view-card-product",authToken,addToCartViewProduct)
-
+router.post("/update-cart-product",authToken,updateAddToCartProduct)
  
-module.exports = router 
+module.exports = router
+     

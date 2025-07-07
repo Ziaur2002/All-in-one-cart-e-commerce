@@ -3,7 +3,7 @@ import { FaEdit } from "react-icons/fa";
 import AdminEditProduct from './AdminEditProduct';
 import displayBDTCurrency from '../helpers/displayCurrency';
 
-const AdminProductCart = ({
+const AdminProductCard = ({
     data,
     fetchdata
 }) => {
@@ -42,4 +42,4 @@ const AdminProductCart = ({
     )
 }
 
-export default AdminProductCart
+export default AdminProductCard

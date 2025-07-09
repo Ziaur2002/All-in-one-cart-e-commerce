@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import fetchCategoryWiseProduct from '../helpers/fetchCategoryWiseProduct'
-import displayBDTCurrency from '../helpers/displayCurrency'
+import displayINRCurrency from '../helpers/displayCurrency'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import addToCart from '../helpers/addToCart'
 import Context from '../context'
@@ -18,6 +19,9 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
        fetchUserAddToCart()
     }
 
+
+
+
     const fetchData = async() =>{
         setLoading(true)
         const categoryProduct = await fetchCategoryWiseProduct(category)
@@ -31,9 +35,15 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
         fetchData()
     },[])
 
+
+
+
   return (
     <div className='container mx-auto px-4 my-6 relative'>
+
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
+
+                
            <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all'>
            {
 
@@ -66,8 +76,8 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
                                     <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
                                     <p className='capitalize text-slate-500'>{product?.category}</p>
                                     <div className='flex gap-3'>
-                                        <p className='text-red-600 font-medium'>{ displayBDTCurrency(product?.sellingPrice) }</p>
-                                        <p className='text-slate-500 line-through'>{ displayBDTCurrency(product?.price)  }</p>
+                                        <p className='text-red-600 font-medium'>{ displayINRCurrency(product?.sellingPrice) }</p>
+                                        <p className='text-slate-500 line-through'>{ displayINRCurrency(product?.price)  }</p>
                                     </div>
                                     <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e)=>handleAddToCart(e,product?._id)}>Add to Cart</button>
                                 </div>
@@ -78,6 +88,8 @@ const CategroyWiseProductDisplay = ({category, heading}) => {
                 
             }
            </div>
+            
+
     </div>
   )
 }

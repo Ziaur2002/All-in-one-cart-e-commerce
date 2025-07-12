@@ -22,6 +22,7 @@ const updateAddToCartProduct = require('../controller/user/updateAddToCartProduc
 const deleteAddToCartProduct = require('../controller/user/deleteAddToCartProduct')
 const searchProduct = require('../controller/product/searchProduct')
 const filterProductController = require('../controller/product/filterProduct')
+const { placeOrderController, getUserOrdersController, getAllOrdersController, updateOrderStatusController } = require('../controller/user/orderController')
 
 
 //user
@@ -54,6 +55,12 @@ router.get("/countAddToCartProduct",authToken,countAddToCartProduct)
 router.get("/view-card-product",authToken,addToCartViewProduct)
 router.post("/update-cart-product",authToken,updateAddToCartProduct)
 router.post("/delete-cart-product",authToken,deleteAddToCartProduct)
+
+// Order routes
+router.post('/place-order', authToken, placeOrderController);
+router.get('/user-orders', authToken, getUserOrdersController);
+router.get('/all-orders', authToken, getAllOrdersController);
+router.post('/update-order-status', authToken, updateOrderStatusController);
 
 module.exports = router
      

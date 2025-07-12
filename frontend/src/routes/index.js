@@ -11,57 +11,72 @@ import CategoryProduct from "../pages/CategoryProduct";
 import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import SearchProduct from '../pages/SearchProduct'
+import Checkout from '../pages/Checkout';
+import OrderSuccess from '../pages/OrderSuccess';
+import UserOrders from '../pages/UserOrders';
 
 const router = createBrowserRouter([
     {
-        path : "/",
-        element : <App/>,
-        children:[
+        path: "/",
+        element: <App />,
+        children: [
             {
-                path : "",
-                element : <Home/>
+                path: "",
+                element: <Home />
             },
             {
-                path : "login",
-                element : <Login/>
+                path: "login",
+                element: <Login />
             },
             {
-                path : "forgot-password",
-                element : <ForgotPassword/>
+                path: "forgot-password",
+                element: <ForgotPassword />
             },
             {
-                path : "sign-up",
-                element : <SignUp/> 
+                path: "sign-up",
+                element: <SignUp />
             },
             {
-                path : "product-category",
-                element : <CategoryProduct/>
+                path: "product-category",
+                element: <CategoryProduct />
             },
             {
-                path : "product/:id",
-                element : <ProductDetails/>
+                path: "product/:id",
+                element: <ProductDetails />
             },
             {
-                path : "cart",
-                element : <Cart/>
-            },
-             {
-                path : "search",
-                element : <SearchProduct/>
+                path: "cart",
+                element: <Cart />
             },
             {
-                path : "admin-panel",
-                element : <AdminPanel/>,
-                children : [
+                path: "search",
+                element: <SearchProduct />
+            },
+            {
+                path: "admin-panel",
+                element: <AdminPanel />,
+                children: [
                     {
-                        path : "all-users",
-                        element : <AllUsers/>
+                        path: "all-users",
+                        element: <AllUsers />
                     },
                     {
-                        path : "all-products",
-                        element : <AllProducts/>
+                        path: "all-products",
+                        element: <AllProducts />
                     }
                 ]
+            },
+            {
+                path: "checkout",
+                element: <Checkout />
+            },
+            {
+                path: "order-success",
+                element: <OrderSuccess />
+            },
+            {
+                path: "orders",
+                element: <UserOrders />
             },
         ]
     }

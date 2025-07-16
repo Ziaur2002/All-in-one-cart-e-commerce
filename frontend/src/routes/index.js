@@ -14,6 +14,10 @@ import SearchProduct from '../pages/SearchProduct'
 import Checkout from '../pages/Checkout';
 import OrderSuccess from '../pages/OrderSuccess';
 import UserOrders from '../pages/UserOrders';
+import AllOrders from '../pages/AllOrders';
+import PaymentSuccess from "../pages/PaymentSuccess";
+import PaymentFail from "../pages/PaymentFail";
+import PaymentCancel from "../pages/PaymentCancel";
 
 const router = createBrowserRouter([
     {
@@ -63,6 +67,10 @@ const router = createBrowserRouter([
                     {
                         path: "all-products",
                         element: <AllProducts />
+                    },
+                    {
+                        path: "all-orders",
+                        element: <AllOrders />
                     }
                 ]
             },
@@ -71,13 +79,25 @@ const router = createBrowserRouter([
                 element: <Checkout />
             },
             {
-                path: "order-success",
+                path: "order-success/:orderId",
                 element: <OrderSuccess />
             },
             {
                 path: "orders",
                 element: <UserOrders />
             },
+            {
+                path: "payment/success/:orderId",
+                element: <PaymentSuccess />
+            },
+            {
+                path: "payment/fail/:orderId",
+                element: <PaymentFail />
+            },
+            {
+                path: "payment/cancel/:orderId",
+                element: <PaymentCancel />
+            }
         ]
     }
 ])

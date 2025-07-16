@@ -35,7 +35,7 @@ const SummaryApi = {
     },
     updateProduct : {
         url : `${backendDomin}/api/update-product`,
-        method  : 'post'
+        method : 'post'
     },
     categoryProduct : {
         url : `${backendDomin}/api/get-categoryProduct`,
@@ -92,8 +92,24 @@ const SummaryApi = {
     updateOrderStatus : {
         url : `${backendDomin}/api/update-order-status`,
         method : 'post'
+    },
+    // New SSLCommerz related API endpoints
+    paymentSuccess : {
+        url : `${backendDomin}/api/payment/success/:orderId`,
+        method : 'get'
+    },
+    paymentFail : {
+        url : `${backendDomin}/api/payment/fail/:orderId`,
+        method : 'get'
+    },
+    paymentCancel : {
+        url : `${backendDomin}/api/payment/cancel/:orderId`,
+        method : 'get'
+    },
+    validatePayment : {
+        url : `${backendDomin}/api/payment/validate/:orderId`,
+        method : 'get'
     }
 }
-
 
 export default SummaryApi

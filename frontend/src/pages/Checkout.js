@@ -10,20 +10,33 @@ const Checkout = () => {
     const navigate = useNavigate();
 
     const [shippingAddress, setShippingAddress] = useState({
-        fullName: user?.fullName || '',
+        fullName: user?.name || '',
         address: '',
         city: '',
         state: '',
         zipCode: '',
         country: '',
-        phoneNumber: user?.phoneNumber || ''
+        phoneNumber: user?.mobile || ''
     });
 
-    const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
+    const [customerEmail, setCustomerEmail] = useState(user?.email || '');
+
+    const [paymentMethod, setPaymentMethod] = useState('cash_on_delivery');
 
     useEffect(() => {
         fetchUserAddToCart();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            setShippingAddress(prev => ({
+                ...prev,
+                fullName: user.name || prev.fullName,
+                phoneNumber: user.mobile || prev.phoneNumber
+            }));
+            setCustomerEmail(user.email || '');
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,17 +46,21 @@ const Checkout = () => {
         }));
     };
 
+    const handleCustomerEmailChange = (e) => {
+        setCustomerEmail(e.target.value);
+    };
+
     const handlePaymentMethodChange = (e) => {
         setPaymentMethod(e.target.value);
     };
 
-    const totalQty = cartProduct.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
-    const totalPrice = cartProduct.reduce((preve, curr) => preve + (curr.quantity * curr?.productId?.sellingPrice), 0);
+    const totalQty = (cartProduct || []).reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0);
+    const totalPrice = (cartProduct || []).reduce((preve, curr) => preve + (curr.quantity * curr?.productId?.sellingPrice), 0);
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
 
-        if (cartProduct.length === 0) {
+        if ((cartProduct || []).length === 0) {
             toast.error("Your cart is empty. Add products to place an order.");
             return;
         }
@@ -57,6 +74,17 @@ const Checkout = () => {
         }
 
         try {
+            const customerDetails = {
+                name: shippingAddress.fullName,
+                email: customerEmail,
+                phone: shippingAddress.phoneNumber
+            };
+
+            if (paymentMethod === 'online_payment' && (!customerDetails.email || customerDetails.email.trim() === '')) {
+                toast.error("Please provide your email address for online payment.");
+                return;
+            }
+
             const response = await fetch(SummaryApi.placeOrder.url, {
                 method: SummaryApi.placeOrder.method,
                 headers: {
@@ -65,9 +93,8 @@ const Checkout = () => {
                 credentials: 'include',
                 body: JSON.stringify({
                     shippingAddress,
-                    paymentDetails: {
-                        method: paymentMethod
-                    }
+                    paymentMethod,
+                    customerDetails
                 })
             });
 
@@ -76,7 +103,12 @@ const Checkout = () => {
             if (responseData.success) {
                 toast.success(responseData.message);
                 fetchUserAddToCart();
-                navigate('/order-success');
+
+                if (paymentMethod === 'online_payment' && responseData.paymentUrl) {
+                    window.location.href = responseData.paymentUrl;
+                } else if (paymentMethod === 'cash_on_delivery') {
+                    navigate(`/order-success/${responseData.data._id}`);
+                }
             } else {
                 toast.error(responseData.message);
             }
@@ -94,11 +126,11 @@ const Checkout = () => {
                 {/* Order Summary */}
                 <div className='w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md'>
                     <h2 className='text-2xl font-semibold mb-4'>Order Summary</h2>
-                    {cartProduct.length === 0 ? (
+                    {(cartProduct || []).length === 0 ? (
                         <p className='text-center text-slate-500'>Your cart is empty.</p>
                     ) : (
                         <div>
-                            {cartProduct.map((product) => (
+                            {(cartProduct || []).map((product) => (
                                 <div key={product?._id} className='flex items-center gap-4 py-3 border-b border-slate-200'>
                                     <div className='w-20 h-20 bg-slate-100 p-1 rounded'>
                                         <img src={product?.productId?.productImage[0]} className='w-full h-full object-scale-down mix-blend-multiply' alt={product?.productId?.productName} />
@@ -166,19 +198,30 @@ const Checkout = () => {
                                 <input type='text' id='phoneNumber' name='phoneNumber' value={shippingAddress.phoneNumber} onChange={handleChange}
                                     className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500' required />
                             </div>
+                            {/* New Email Input Field */}
+                            <div>
+                                <label htmlFor='customerEmail' className='block text-sm font-medium text-gray-700'>Email Address</label>
+                                <input type='email' id='customerEmail' name='customerEmail' value={customerEmail} onChange={handleCustomerEmailChange}
+                                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500' required={paymentMethod === 'online_payment'} />
+                            </div>
                         </div>
 
                         <h2 className='text-2xl font-semibold mt-8 mb-4'>Payment Method</h2>
                         <div className='space-y-4'>
                             <div className='flex items-center'>
-                                <input type='radio' id='cod' name='paymentMethod' value='Cash on Delivery' checked={paymentMethod === 'Cash on Delivery'} onChange={handlePaymentMethodChange}
+                                <input type='radio' id='cod' name='paymentMethod' value='cash_on_delivery' checked={paymentMethod === 'cash_on_delivery'} onChange={handlePaymentMethodChange}
                                     className='focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300' />
                                 <label htmlFor='cod' className='ml-3 block text-base font-medium text-gray-700'>Cash on Delivery (COD)</label>
+                            </div>
+                            <div className='flex items-center'>
+                                <input type='radio' id='online_payment' name='paymentMethod' value='online_payment' checked={paymentMethod === 'online_payment'} onChange={handlePaymentMethodChange}
+                                    className='focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300' />
+                                <label htmlFor='online_payment' className='ml-3 block text-base font-medium text-gray-700'>Online Payment (SSLCommerz)</label>
                             </div>
                         </div>
 
                         <button type='submit' className='bg-red-600 text-white w-full py-3 mt-6 rounded-md font-semibold text-lg hover:bg-red-700 transition-colors'>
-                            Place Order
+                            {paymentMethod === 'online_payment' ? 'Proceed to Online Payment' : 'Place Order'}
                         </button>
                     </form>
                 </div>

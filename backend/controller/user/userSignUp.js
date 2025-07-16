@@ -1,9 +1,9 @@
-const userModel = require('../../models/userModel'); // Adjust path based on folder structure
+const userModel = require('../../models/userModel');
 const bcrypt = require("bcryptjs");
 
 async function userSignUpController(req, res) {
     try {
-        const { email, password, name, profilePic } = req.body; // ✅ Added profilePic
+        const { email, password, name, profilePic } = req.body;
 
         if (!email || !password || !name) {
             return res.status(400).json({
@@ -34,7 +34,7 @@ async function userSignUpController(req, res) {
             email,
             password: hashPassword,
             name,
-            profilePic: profilePic || "", // ✅ Ensured profilePic is stored
+            profilePic: profilePic || "",
             role: "GENERAL",
         });
 

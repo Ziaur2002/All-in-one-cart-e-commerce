@@ -18,6 +18,8 @@ import AllOrders from '../pages/AllOrders';
 import PaymentSuccess from "../pages/PaymentSuccess";
 import PaymentFail from "../pages/PaymentFail";
 import PaymentCancel from "../pages/PaymentCancel";
+import UserProfile from "../pages/UserProfile";
+import EditProfile from "../pages/EditProfile";
 
 const router = createBrowserRouter([
     {
@@ -83,7 +85,15 @@ const router = createBrowserRouter([
                 element: <OrderSuccess />
             },
             {
-                path: "orders",
+                path: "user/profile",
+                element: <UserProfile />
+            },
+            {
+                path: "user/edit-profile",
+                element: <EditProfile />
+            },
+            {
+                path: "user/orders",
                 element: <UserOrders />
             },
             {

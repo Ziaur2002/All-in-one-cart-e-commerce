@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    name: { type: String, required: true }, // ✅ Added required validation
+    name: { type: String, required: true },
     email: {
         type: String,
         unique: true,
         required: true,
         trim: true
     },
-    password: { type: String, required: true }, // ✅ Ensured password is required
-    profilePic: { type: String, default: "" }, // ✅ Set default value for profilePic
+    password: { type: String, required: true },
+    profilePic: { type: String, default: "" },
     role : {type: String},
 }, {     
     timestamps: true

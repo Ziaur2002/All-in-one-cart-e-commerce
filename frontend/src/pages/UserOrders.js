@@ -1,16 +1,39 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import SummaryApi from '../common';
-import Context from '../context';
 import displayBDTCurrency from '../helpers/displayCurrency';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserDetails } from '../store/userSlice';
 
 const UserOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useContext(Context);
+    const user = useSelector(state => state?.user?.user);
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(SummaryApi.current_user.url, {
+                    method: SummaryApi.current_user.method,
+                    credentials: 'include'
+                });
+                const responseData = await response.json();
+
+                if (responseData.success) {
+                    dispatch(setUserDetails(responseData.data));
+                } else {
+                    toast.error(responseData.message || "Failed to fetch user details.");
+                    dispatch(setUserDetails(null));
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+                toast.error("An error occurred while fetching user details.");
+                dispatch(setUserDetails(null));
+            }
+        };
+
         const fetchOrders = async () => {
             try {
                 setLoading(true);
@@ -36,18 +59,42 @@ const UserOrders = () => {
         if (user?._id) {
             fetchOrders();
         } else {
-            setLoading(false);
-            setOrders([]);
+            fetchUserDetails().then(() => {
+                if (user?._id) {
+                    fetchOrders();
+                } else {
+                    setLoading(false);
+                }
+            });
         }
-    }, [user]);
+    }, [user, dispatch]);
+
+    if (loading) {
+        return (
+            <div className='container mx-auto p-4 text-center text-lg text-blue-600'>
+                Loading your orders...
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className='container mx-auto p-4 text-center text-lg text-slate-500'>
+                Please log in to view your orders.
+                <div className='mt-4'>
+                    <Link to="/login" className='bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors'>
+                        Login
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className='container mx-auto p-4'>
             <h1 className='text-3xl font-bold mb-6 text-center'>Your Orders</h1>
 
-            {loading ? (
-                <div className='text-center text-lg text-blue-600'>Loading your orders...</div>
-            ) : orders.length === 0 ? (
+            {orders.length === 0 ? (
                 <div className='text-center text-lg text-slate-500 bg-white p-5 rounded-lg shadow-md'>
                     <p>You haven't placed any orders yet.</p>
                     <Link to='/' className='mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors'>
@@ -60,11 +107,12 @@ const UserOrders = () => {
                         <div key={order._id} className='bg-white p-6 rounded-lg shadow-md border border-slate-200'>
                             <div className='flex justify-between items-center mb-4 border-b pb-3'>
                                 <h2 className='text-xl font-semibold'>Order ID: {order._id}</h2>
-                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${order.orderStatus === 'completed' ? 'bg-green-100 text-green-800' :
-                                        order.orderStatus === 'pending' ? 'bg-orange-100 text-orange-800' :
-                                            order.orderStatus === 'failed' ? 'bg-red-100 text-red-800' :
-                                                'bg-gray-100 text-gray-800'
-                                    }`}>
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                    order.orderStatus === 'completed' ? 'bg-green-100 text-green-800' :
+                                    order.orderStatus === 'pending' ? 'bg-orange-100 text-orange-800' :
+                                    order.orderStatus === 'failed' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                }`}>
                                     {order.orderStatus.replace(/_/g, ' ').toUpperCase()}
                                 </span>
                             </div>

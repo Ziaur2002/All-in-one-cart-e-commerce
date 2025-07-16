@@ -1,37 +1,40 @@
-const userModel = require("../../models/userModel")
+const userModel = require("../../models/userModel");
 
 async function updateUser(req, res) {
-    try{
-        const sessionUser = req.userId 
-
-        const { userId, email, name, role } = req.body
+    try {
+        const sessionUser = req.userId;
+        const { name, mobile } = req.body;
 
         const payload = {
-            ...( email && { email : email}), 
-            ...(name && {name :  name}),
-            ...(role && {role : role})
-        }
-        const user = await userModel.findById(sessionUser)
-        console.log("user-role", user.role)
+            ...(name && { name: name }),
+            ...(mobile && { mobile: mobile })
+        };
 
-        const updateUser = await userModel.findByIdAndUpdate(userId,payload)
+        const updatedUser = await userModel.findByIdAndUpdate(sessionUser, payload, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                message: "User not found or unable to update.",
+                error: true,
+                success: false
+            });
+        }
 
         res.json({
-            data : updateUser,
-            message : "User Updated",
-            success : true,
-            error : false
-        })
+            data: updatedUser,
+            message: "Profile updated successfully!",
+            success: true,
+            error: false
+        });
 
-
-    }catch(err){
-        res.status(400).json({
-            message : err.message || err,
-            error : true,
-            success : false
-        })
+    } catch (err) {
+        console.error("Error in updateUser backend:", err);
+        res.status(500).json({
+            message: err.message || "An internal server error occurred during profile update.",
+            error: true,
+            success: false
+        });
     }
-    
 }
 
-module.exports = updateUser
+module.exports = updateUser;

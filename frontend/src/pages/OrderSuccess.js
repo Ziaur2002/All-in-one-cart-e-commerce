@@ -133,7 +133,7 @@ const OrderSuccess = () => {
                 </div>
 
                 <div className='text-center mt-8'>
-                    <Link to='/orders' className='inline-block bg-green-600 text-white py-3 px-6 rounded-md font-semibold text-lg hover:bg-green-700 transition-colors mr-4'>
+                    <Link to='/user/orders' className='inline-block bg-green-600 text-white py-3 px-6 rounded-md font-semibold text-lg hover:bg-green-700 transition-colors mr-4'>
                         View All Your Orders
                     </Link>
                     <Link to='/' className='inline-block bg-blue-600 text-white py-3 px-6 rounded-md font-semibold text-lg hover:bg-blue-700 transition-colors'>

@@ -54,7 +54,6 @@ const Header = () => {
   }
 
   const handleProfileClick = () => {
-    setMenuDisplay(preve => !preve);
     navigate('/user/profile');
   };
 
@@ -86,20 +85,6 @@ const Header = () => {
                       <FaRegCircleUser />
                     )
                   }
-                </div>
-              )
-            }
-
-            {
-              menuDisplay && (
-                <div className='absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded' >
-                  <nav>
-                    {
-                      user?.role === ROLE.ADMIN && (
-                        <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hidden md:block hover:bg-slate-100 p-2' onClick={() => setMenuDisplay(preve => !preve)}>Admin Panel</Link>
-                      )
-                    }
-                  </nav>
                 </div>
               )
             }
